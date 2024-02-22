@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Upload and search</title>
+</head>
+<body>
+<form enctype="multipart/form-data" method="POST">
+    <h2>Upload Image:</h2>
+    <input name="img" type="file"/>
+    <button type="submit">submit</button>
+</form>
+
+<form enctype="multipart/form-data" method="GET">
+    <h2>Search for Image</h2>
+    <input name="fileNameToSearch" type="text" placeholder="Search..">
+    <button type="submit">search</button>
+</form>
+ 
+{% if image %}
+    <div>{{ file.original_filename }} - <a href="https://{{ file.bucket }}.s3.{{ file.region }}.amazonaws.com/{{ file.filename }}">{{ file.filename }}</a></div>
+{% endif %}
+</body>
+</html>
