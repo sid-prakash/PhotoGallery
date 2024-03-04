@@ -39,4 +39,9 @@ def create_app(test_config=None):
     app.register_blueprint(fileupload.bp)
     app.add_url_rule('/', endpoint='fileupload.index')
 
+    app.config['S3_BUCKET'] = "project1s3imagesbucket"
+    app.config['S3_KEY'] = "AKIAXCJY6ACWGBTNMSXF"
+    app.config['S3_SECRET'] = "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"
+    app.config['S3_LOCATION'] = 'http://{}.s3.amazonaws.com/'.format(app.config['S3_BUCKET'])
+
     return app
