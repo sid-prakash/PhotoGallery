@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, request, redirect, send_file
 from werkzeug.utils import secure_filename
 from PIL import Image
 from io import BytesIO
-import mysql.connector
+
 import boto3
 
 

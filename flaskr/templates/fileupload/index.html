@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Users Uploads{% endblock %}</h1>
+  {% if g.user %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for post in posts %}
+    <article class="post">
+      <p class="body">{{ post[0] }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
