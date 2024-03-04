@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, current_app,flash, g, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
@@ -41,9 +41,9 @@ def upload_file():
         
         filename = secure_filename(file.filename)
 
-        client = boto3.client('s3', aws_access_key_id=g.config['S3_KEY'], aws_secret_access_key=g.config['S3_SECRET'])
+        client = boto3.client('s3', aws_access_key_id=current_app.config['S3_KEY'], aws_secret_access_key=current_app.config['S3_SECRET'])
         client.put_object(Body=file,
-                          Bucket=g.config['S3_BUCKET'],
+                          Bucket=current_app.config['S3_BUCKET'],
                           Key=filename)
         
 
@@ -55,9 +55,9 @@ def upload_file():
             try:
                 s3objectkey = request.args.get('fileNameToSearch')
                 image_details = [s3objectkey, "project1s3imagesbucket", "us-east-1"]
-
-                client = boto3.client('s3', aws_access_key_id = g.config['S3_KEY'], aws_secret_access_key = g.config['S3_SECRET'])
-                image = client.get_object(Bucket=g.config['S3_BUCKET'], Key=s3objectkey)
+                d = g
+                client = boto3.client('s3', aws_access_key_id = current_app.config['S3_KEY'], aws_secret_access_key = current_app.config['S3_SECRET'])
+                image = client.get_object(Bucket=current_app.config['S3_BUCKET'], Key=s3objectkey)
 
                 if image:
                     return render_template('fileupload/index.html', image=image_details)
