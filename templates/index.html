@@ -11,14 +11,21 @@
     <button type="submit">submit</button>
 </form>
 
+{% if upload %}
+    <br><a>{{ upload }}</a>
+{% endif %}
+
 <form enctype="multipart/form-data" method="GET">
     <h2>Search for Image</h2>
     <input name="fileNameToSearch" type="text" placeholder="Search..">
     <button type="submit">search</button>
 </form>
- 
-{% if image %}
-    <div>{{ file.original_filename }} - <a href="https://{{ file.bucket }}.s3.{{ file.region }}.amazonaws.com/{{ file.filename }}">{{ file.filename }}</a></div>
+<br>
+
+{% if image == "image not found" %}
+    <a>{{image}}</a>
+{% elif image %}
+    <div><a href="https://{{ image[1] }}.s3.{{ image[2] }}.amazonaws.com/{{ image[0] }}">{{ image[0] }}</a></div>
 {% endif %}
 </body>
 </html>
