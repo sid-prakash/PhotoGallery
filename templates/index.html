@@ -11,12 +11,17 @@
     <button type="submit">submit</button>
 </form>
 
+{% if upload %}
+    <br><a>{{ upload }}</a>
+{% endif %}
+
 <form enctype="multipart/form-data" method="GET">
     <h2>Search for Image</h2>
     <input name="fileNameToSearch" type="text" placeholder="Search..">
     <button type="submit">search</button>
 </form>
- 
+<br>
+
 {% if image == "image not found" %}
     <a>{{image}}</a>
 {% elif image %}

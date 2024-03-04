@@ -54,13 +54,13 @@ def upload_file():
                 return "FILE NOT ALLOWED!"
         
         filename = secure_filename(file.filename)
-        content_type = request.mimetype
-        print(filename)
 
         client = boto3.client('s3', aws_access_key_id=app.config['S3_KEY'], aws_secret_access_key=app.config['S3_SECRET'])
         client.put_object(Body=file,
                           Bucket=app.config['S3_BUCKET'],
                           Key=filename)
+        
+        return render_template('index.html', upload= filename + " successfully uploaded")
 
 
     if request.method == 'GET':
