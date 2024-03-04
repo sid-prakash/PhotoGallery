@@ -1,8 +1,8 @@
 from flask import Flask, render_template, url_for, request, redirect, send_file
 from werkzeug.utils import secure_filename
-from PIL import Image
+# from PIL import Image
 from io import BytesIO
-import mysql.connector
+# import mysql.connector
 import boto3
 
 
@@ -12,14 +12,14 @@ ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
 app.debug = True
 
 #We have to make a connection to the database. There is almost certainly some "bad practice" going on here (but it will work)
-db = mysql.connector.connect(host='se422project1.cfcmskqwgqu4.us-east-1.rds.amazonaws.com',
-        user='admin',
-        password='password',
-        db='photogallery_data',
-        port = '3306')
+# db = mysql.connector.connect(host='se422project1.cfcmskqwgqu4.us-east-1.rds.amazonaws.com',
+#         user='admin',
+#         password='password',
+#         db='photogallery_data',
+#         port = '3306')
 
-#We must create a cursor object. It will let us execute all the queries we want
-cursor_conn = db.cursor()
+# #We must create a cursor object. It will let us execute all the queries we want
+# cursor_conn = db.cursor()
 
 
 
@@ -65,52 +65,31 @@ def upload_file():
 
     if request.method == 'GET':
         if 'fileNameToSearch' in request.args:
-            s3objectkey = request.args.get('fileNameToSearch')
-            client = boto3.client('s3', aws_access_key_id = app.config['S3_KEY'], aws_secret_access_key = app.config['S3_SECRET'])
-            image = client.get_object(Bucket=app.config['S3_BUCKET'], Key=s3objectkey)
-            image_data = image.get('Body').read()
-
-            return send_file(BytesIO(image_data),mimetype='jpeg', download_name=s3objectkey)
+            try:
+                s3objectkey = request.args.get('fileNameToSearch')
+                image_details = [s3objectkey, "project1s3imagesbucket", "us-east-1"]
+            
+                client = boto3.client('s3', aws_access_key_id = app.config['S3_KEY'], aws_secret_access_key = app.config['S3_SECRET'])
+                image = client.get_object(Bucket=app.config['S3_BUCKET'], Key=s3objectkey)
+                
+                if image:
+                    return render_template('index.html', image=image_details)
+            except:
+                return render_template('index.html', image="image not found")
 
         
     return render_template('index.html')
 
-@app.route('/returnpic', methods=['GET','POST'])
-def returnpic():
-    client = boto3.client('s3',aws_access_key_id=app.config['S3_KEY'], aws_secret_access_key=app.config['S3_SECRET'])
-    return send_file('NathanielBorenstein.jpg')
-
-@app.route('/ret_image_file', methods=['GET'])
-def ret_image_file():
-    client = boto3.client('s3',aws_access_key_id=app.config['S3_KEY'], aws_secret_access_key=app.config['S3_SECRET'])
-    image = client.get_object(Bucket=app.config['S3_BUCKET'], Key='woods.jpg')
-    image_data = image.get('Body').read()
-    #This took me 7 hours to figure out
-    return send_file(BytesIO(image_data),mimetype='jpeg', download_name='woods.jpg')
 
 
-@app.route('/retrieve_images', methods=['GET', 'POST'])
-def retrieve_images():
-    return render_template('retrieve_images.html')
 
-@app.route('/',methods=['GET'])
-def image_from_string():
-    print(request.args)
-    print(type(request.args))
+# @app.route('/makeaquery', methods=['GET'])
+# def makingthequery():
+#     cursor_conn.execute("SELECT * FROM photogallery_data.photo_info WHERE owner = 'ellie'")
+#     for row in cursor_conn.fetchall():
+#         print(row[0])
 
-    client = boto3.client('s3', aws_access_key_id = app.config['S3_KEY'], aws_secret_access_key = app.config['S3_SECRET'])
-    image = client.get_object(Bucket=app.config['S3_BUCKET'], Key='woods.jpg')
-    image_data = image.get('Body').read()
-    return send_file(BytesIO(image_data),mimetype='jpeg', download_name='woods.jpg')
-
-
-@app.route('/makeaquery', methods=['GET'])
-def makingthequery():
-    cursor_conn.execute("SELECT * FROM photogallery_data.photo_info WHERE owner = 'ellie'")
-    for row in cursor_conn.fetchall():
-        print(row[0])
-
-    return render_template('index.html')
+#     return render_template('index.html')
 
 if __name__ == '__main__':
     app.run()
