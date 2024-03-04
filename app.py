@@ -59,7 +59,7 @@ def upload_file():
         client.put_object(Body=file,
                           Bucket=app.config['S3_BUCKET'],
                           Key=filename)
-        
+
         return render_template('index.html', upload= filename + " successfully uploaded")
 
 
@@ -68,16 +68,16 @@ def upload_file():
             try:
                 s3objectkey = request.args.get('fileNameToSearch')
                 image_details = [s3objectkey, "project1s3imagesbucket", "us-east-1"]
-            
+
                 client = boto3.client('s3', aws_access_key_id = app.config['S3_KEY'], aws_secret_access_key = app.config['S3_SECRET'])
                 image = client.get_object(Bucket=app.config['S3_BUCKET'], Key=s3objectkey)
-                
+
                 if image:
                     return render_template('index.html', image=image_details)
             except:
                 return render_template('index.html', image="image not found")
 
-        
+
     return render_template('index.html')
 
 
