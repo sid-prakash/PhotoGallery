@@ -47,9 +47,11 @@ def get_user_info(username):
 
     help = get_db()
     table = help.Table(table_name)
-    response = table.scan()
+    response = table.query(
+        KeyConditionExpression=Key('username').eq(username)
+    )
 
-    return 0
+    return (response['Items'])[0]
 
 
 
@@ -64,13 +66,17 @@ def login():
 
         print(user)
 
+
+
         if user is None:
             error = 'Incorrect username.'
-        elif not user[1] == password_hash:
+        elif not user.get('password_hash') == password_hash:
             error = 'Incorrect password.'
 
         if error is None:
-            session.clear()
+            if session.__len__() != 0:
+                session.clear()
+            h = session
             session['username'] = username
             return redirect(url_for('fileupload.index'))
 
