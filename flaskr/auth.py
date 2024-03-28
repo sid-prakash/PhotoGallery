@@ -1,11 +1,13 @@
 import functools
-
+import boto3
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, Flask
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from flaskr.db import get_db
+
+from boto3.dynamodb.conditions import Key
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -38,19 +40,27 @@ def register():
 
     return render_template('auth/register.html')
 
+def get_user_info(username):
+    table_name = 'project2users'  # Replace 'user_info_table' with your actual table name
+
+    # Assuming app.dynamodb is the initialized DynamoDB resource
+
+    help = get_db()
+    table = help.Table(table_name)
+    response = table.scan()
+
+    return 0
+
+
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password_hash = request.form['password']
-        db = get_db()
         error = None
-        cursor = db.cursor()
-        cursor.execute(
-            'SELECT * FROM photogallery_data.user_info WHERE username = %s', (username,)
-        )
-        user = cursor.fetchone()
+
+        user = get_user_info(username)
 
         print(user)
 

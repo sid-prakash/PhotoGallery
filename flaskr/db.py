@@ -1,33 +1,34 @@
-import mysql.connector
 import click
+from boto3.session import Session
 from flask import current_app, g
-
-
+import boto3
 def get_db():
-    if 'db' not in g:
-        g.db = mysql.connector.connect(
-            host='se422project1.cfcmskqwgqu4.us-east-1.rds.amazonaws.com',
-            user='admin',
-            password='password',
-            database='photogallery_data',
-            port=3306
-        )
 
+    # current_app.config['DYNAMO_TABLES'] = [
+    #     {
+    #         'TableName': 'project2users',
+    #         'KeySchema': [{'AttributeName': 'username', 'KeyType': 'String'}],
+    #         'AttributeDefinitions': [{'AttributeName': 'username', 'AttributeType': 'String'}],
+    #         'ProvisionedThroughput': {'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
+    #     }, {
+    #         'TableName': 'project2photos',
+    #         'KeySchema': [{'AttributeName': 'photo_id', 'KeyType': 'number'}],
+    #         'AttributeDefinitions': [{'AttributeName': 'photo_id', 'AttributeType': 'number'}],
+    #         'ProvisionedThroughput': {'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
+    #     }
+    # ]
 
-    return g.db
-
+    return boto3.resource('dynamodb',
+                          region_name='us-east-1',
+                          aws_access_key_id='',
+                          aws_secret_access_key='')
 
 def close_db(e=None):
     db = g.pop('db', None)
 
-    if db is not None:
-        db.close()
-
-
 def init_db():
     try:
-        db = get_db()
-        db.close()
+
 
 
         print('Connected to the database.')
