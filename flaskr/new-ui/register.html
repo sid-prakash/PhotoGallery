@@ -10,11 +10,11 @@
 
 <body>
     <div class="container">
-        <form class="form">
+        <form class="form" method="post">
             <h2>Register</h2>
             <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
+                <label for="username">Email</label>
+                <input type="email" id="username" name="username" required>
             </div>
             <div class="input-group">
                 <label for="password">Password</label>
@@ -23,6 +23,7 @@
             <div class="input-group">
                 <label for="confirm-password">Confirm Password</label>
                 <input type="password" id="confirm-password" name="confirm-password" required>
+                <p id="password-error" style="color: red; display: none;">Passwords do not match</p>
             </div>
             <button type="submit">Register</button>
             <div class="login">
@@ -31,6 +32,21 @@
             </div>
         </form>
     </div>
+
+    <script>
+        function validateForm() {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm-password").value;
+
+            if (password !== confirmPassword) {
+                document.getElementById("password-error").style.display = "block";
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+    </script>
+
 </body>
 
 </html>

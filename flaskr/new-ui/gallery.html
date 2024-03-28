@@ -10,8 +10,7 @@
   <nav class="navbar">
     <div class="container">
       <h1>Image Gallery</h1>
-      <button class="logout-button" onclick="logout()">Log Out</button>
-    </div>
+      <button class="logout-button" onclick="window.location.href='{{ url_for(\'auth.logout\') }}';">Log Out</button>    </div>
   </nav>
 
   <div class="container">
@@ -42,7 +41,8 @@
             img.src = reader.result;
             img.alt = file.name; // Set the alt attribute to the file name
 
-            const nameParagraph = document.createElement('p'); // Create a paragraph element for the name
+            const nameParagraph = document.createElement('a'); // Create a paragraph element for the name
+            nameParagraph.href = "https://project1s3imagesbucket.s3.us-east-1.amazonaws.com/${file.name}"
             nameParagraph.textContent = file.name; // Set the text content to the file name
 
             const galleryItem = document.createElement('div'); // Create a container for each image and its name
@@ -70,12 +70,6 @@
         }
       });
     });
-
-    function logout() {
-      // Implement logout functionality here
-      alert('Logging out...');
-      // Redirect to logout page or perform other logout actions
-    }
   </script>
 </body>
 </html>

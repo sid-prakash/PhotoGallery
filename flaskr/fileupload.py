@@ -24,10 +24,6 @@ def index():
     return render_template('fileupload/index.html', posts=posts)
 '''
 
-ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 @bp.route('/', methods=['GET', 'POST'])
 @login_required
@@ -35,9 +31,7 @@ def upload_file():
     # cur = conn.cursor()
     
     if request.method == 'POST':
-        file = request.files['img']
-        if not allowed_file(file.filename):
-                return "FILE NOT ALLOWED!"
+        file = request.files['fileInput']
         
         filename = secure_filename(file.filename)
 
