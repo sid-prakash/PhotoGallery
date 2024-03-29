@@ -11,7 +11,7 @@ import boto3
 
 bp = Blueprint('gallery', __name__)
 
-@bp.route('/')
+@bp.route('/', methods=['GET', 'POST'])
 @login_required
 def upload_file():
     help = get_db()
@@ -26,6 +26,18 @@ def upload_file():
     for item in items:
         url = "https://project1s3imagesbucket.s3.us-east-1.amazonaws.com/" + item['photo_url']
         photo_url.append([url, item['photo_url']])
+        
+    
+    if request.method == 'POST':
+        file = request.files['fileInput']
+        
+        filename = secure_filename(file.filename)
+
+        client = boto3.client('s3', aws_access_key_id=current_app.config['S3_KEY'], aws_secret_access_key=current_app.config['S3_SECRET'])
+        client.put_object(Body=file,
+                          Bucket=current_app.config['S3_BUCKET'],
+                          Key=filename)
+        return render_template('fileupload/gallery.html', image=photo_url, as_attachment=True)
     
 
     return render_template('fileupload/gallery.html', image=photo_url, as_attachment=True)

@@ -20,8 +20,8 @@ def get_db():
 
     return boto3.resource('dynamodb',
                           region_name='us-east-1',
-                          aws_access_key_id='',
-                          aws_secret_access_key='')
+                          aws_access_key_id='AKIAXCJY6ACWEKKWCBXB',
+                          aws_secret_access_key='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')
 
 def close_db(e=None):
     db = g.pop('db', None)

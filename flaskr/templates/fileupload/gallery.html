@@ -16,8 +16,11 @@
 
   <div class="container">
     <div class="upload-section">
-      <h2>Upload Image</h2>
-      <input type="file" id="fileInput" accept="image/*">
+      <form enctype="multipart/form-data" method="POST" action="/">
+        <h2>Upload Image</h2>
+        <input type="file" id="fileInput" accept="image/*" name="fileInput">
+        <button type="submit">Upload</button> <!-- Submit button included within the form -->
+      </form>
     </div>
     <div class="search-section">
       <h2>Search Images</h2>

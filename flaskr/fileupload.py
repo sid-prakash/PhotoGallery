@@ -26,12 +26,13 @@ def index():
 '''
 
 
-@bp.route('/uploadfile', methods=['GET', 'POST'])
+@bp.route('/', methods=['POST'])
 @login_required
 def upload_file():
     # cur = conn.cursor()
-    
+    print("woowowowowow")
     if request.method == 'POST':
+        print("woowowowowow")
         file = request.files['fileInput']
         
         filename = secure_filename(file.filename)
@@ -42,25 +43,9 @@ def upload_file():
                           Key=filename)
         
 
-        return render_template('fileupload/index.html', upload= filename + " successfully uploaded")
+        return render_template('fileupload/gallery.html')
 
-
-    if request.method == 'GET':
-        if 'fileNameToSearch' in request.args:
-            try:
-                s3objectkey = request.args.get('fileNameToSearch')
-                image_details = [s3objectkey, "project1s3imagesbucket", "us-east-1"]
-                d = g
-                client = boto3.client('s3', aws_access_key_id = current_app.config['S3_KEY'], aws_secret_access_key = current_app.config['S3_SECRET'])
-                image = client.get_object(Bucket=current_app.config['S3_BUCKET'], Key=s3objectkey)
-
-                if image:
-                    return render_template('fileupload/index.html', image=image_details)
-            except:
-                return render_template('fileupload/index.html', image="image not found")
-
-
-    return render_template('fileupload/index.html')
+    return render_template('fileupload/gallery.html')
 
 
 
