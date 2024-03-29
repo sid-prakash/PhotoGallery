@@ -1,3 +1,4 @@
+from boto3.dynamodb.conditions import Key
 from flask import (
     Blueprint, current_app,flash, g, redirect, render_template, request, url_for
 )
@@ -25,7 +26,7 @@ def index():
 '''
 
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/uploadfile', methods=['GET', 'POST'])
 @login_required
 def upload_file():
     # cur = conn.cursor()
@@ -60,3 +61,6 @@ def upload_file():
 
 
     return render_template('fileupload/index.html')
+
+
+

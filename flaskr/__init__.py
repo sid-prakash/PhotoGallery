@@ -40,7 +40,12 @@ def create_app(test_config=None):
 
     from . import fileupload
     app.register_blueprint(fileupload.bp)
-    app.add_url_rule('/', endpoint='fileupload.index')
+    app.add_url_rule('/uploadfile', endpoint='fileupload.index')
+
+    from . import gallery
+    app.register_blueprint(gallery.bp)
+    app.add_url_rule('/', endpoint='fileupload.gallery')
+
 
     app.config['S3_BUCKET'] = "project1s3imagesbucket"
     app.config['S3_KEY'] = "AKIAXCJY6ACWGBTNMSXF"

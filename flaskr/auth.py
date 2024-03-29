@@ -78,7 +78,7 @@ def login():
                 session.clear()
             h = session
             session['username'] = username
-            return redirect(url_for('fileupload.index'))
+            return  render_template('fileupload/gallery.html')
 
         flash(error)
 
@@ -94,14 +94,7 @@ def load_logged_in_user():
     if username is None:
         g.user = None
     else:
-        db = get_db()
-        cursor = db.cursor()
-        cursor.execute(
-            'SELECT * FROM photogallery_data.user_info WHERE username = %s', (username,)
-        )
-
-        g.user = cursor.fetchone()
-        user = g.user
+        g.user = username
 
 
 @bp.route('/logout')

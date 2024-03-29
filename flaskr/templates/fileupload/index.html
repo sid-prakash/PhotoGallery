@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Users Uploads{% endblock %}</h1>
-  {% if g.user %}
-  {% endif %}
+<h1>{% block title %}Users Uploads{% endblock %}</h1>
+{% if g.user %}
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -16,26 +16,26 @@
     {% endif %}
   {% endfor %}
 
-  <form enctype="multipart/form-data" method="POST">
+<form enctype="multipart/form-data" method="POST">
     <h2>Upload Image:</h2>
     <input name="img" type="file"/>
     <button type="submit">submit</button>
-  </form>
-  
-  {% if upload %}
-    <br><a>{{ upload }}</a>
-  {% endif %}
-  
-  <form enctype="multipart/form-data" method="GET">
+</form>
+
+{% if upload %}
+<br><a>{{ upload }}</a>
+{% endif %}
+
+<form enctype="multipart/form-data" method="GET">
     <h2>Search for Image</h2>
     <input name="fileNameToSearch" type="text" placeholder="Search..">
     <button type="submit">search</button>
-  </form>
-  <br>
-  
-  {% if image == "image not found" %}
-    <a>{{image}}</a>
-  {% elif image %}
-    <div><a href="https://{{ image[1] }}.s3.{{ image[2] }}.amazonaws.com/{{ image[0] }}">{{ image[0] }}</a></div>
-  {% endif %}
+</form>
+<br>
+
+{% if image == "image not found" %}
+<a>{{image}}</a>
+{% elif image %}
+<div><a href="https://{{ image[1] }}.s3.{{ image[2] }}.amazonaws.com/{{ image[0] }}">{{ image[0] }}</a></div>
+{% endif %}
 {% endblock %} 

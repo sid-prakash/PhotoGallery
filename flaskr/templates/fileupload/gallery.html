@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block header %}
+  <h1>{% block title %}Users Gallery{% endblock %}</h1>
+  {% if g.user %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+    <div class="search-section">
+      <h2>Search Images</h2>
+      <input type="text" id="searchInput" placeholder="Search images...">
+    </div>
+    <div class="gallery" id="imageGallery">
+      <!-- Images will be displayed here -->
+    </div>
+  </div>
+{% endblock %}
+
+
+
