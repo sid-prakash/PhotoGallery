@@ -27,9 +27,9 @@ def register():
 
         if error is None:
             try:
-                table = db.Table('project2users')
-                insert_item_resp = table.put_item(
-                    Item={
+                table = db['project2users']
+                insert_item_resp = table.insert_one(
+                    {
                         'username': username,
                         'password_hash': password,
                     }
