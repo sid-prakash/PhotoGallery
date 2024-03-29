@@ -1,6 +1,23 @@
 import os
-
+import csv
 from flask import Flask
+
+def get_S3Key_from_CSV():
+     with open(file="Braden_accessKeys.csv", newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        spamreader.__next__()
+        _2nd_line = spamreader.__next__().pop()
+        s3key = _2nd_line.split(",")[0]
+     return s3key;
+
+
+def get_S3Secret_from_CSV():
+     with open(file="Braden_accessKeys.csv", newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        spamreader.__next__()
+        _2nd_line = spamreader.__next__().pop()
+        s3secret = _2nd_line.split(",")[1]
+     return s3secret;
 
 def create_app(test_config=None):
     # create and configure the app
@@ -40,8 +57,8 @@ def create_app(test_config=None):
     app.add_url_rule('/', endpoint='fileupload.index')
 
     app.config['S3_BUCKET'] = "project1s3imagesbucket"
-    app.config['S3_KEY'] = "AKIAXCJY6ACWGBTNMSXF"
-    app.config['S3_SECRET'] = "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"
+    app.config['S3_KEY'] = get_S3Key_from_CSV()
+    app.config['S3_SECRET'] = get_S3Secret_from_CSV()
     app.config['S3_LOCATION'] = 'http://{}.s3.amazonaws.com/'.format(app.config['S3_BUCKET'])
 
     return app
