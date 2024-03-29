@@ -29,7 +29,7 @@
       <div class="gallery-item">
         <img src="{{ url[0] }}" alt="{{ url[1] }}">
         <a>{{ url[1] }}</a>
-        <a href="{{ url[0] }}" download="hh"><button>Download</button></a>
+         <a href="{{ url_for('gallery.download', filename=url[0]) }}"><button>Download</button></a>
       </div>
       {% endfor %}
     </div>
