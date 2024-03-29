@@ -9,21 +9,30 @@
 </head>
 
 <body>
-<nav class="navbar">
-    <div class="container">
-        <h1>Image Gallery</h1>
-        <button class="logout-button"><a href="{{ url_for('auth.logout') }}">Log Out</a></button>
-
-        <button class="logout-button"><a href="{{ url_for('fileupload.gallery') }}">Gallery</a></button>
-    </div>
-</nav>
+    <nav class="navbar">
+        <div class="container">
+            <h1>Image Gallery</h1>
+            <button class="logout-button" onclick="logout()">Log Out</button>
+            <button class="logout-button" onclick="goToGallery()">Gallery</button>
+        </div>
+    </nav>
+    
+    <script>
+        function logout() {
+            window.location.href = "{{ url_for('auth.logout') }}";
+        }
+    
+        function goToGallery() {
+            window.location.href = "{{ url_for('fileupload.gallery') }}";
+        }
+    </script>
 
 <div class="container">
     <div class="upload-section">
-        <form enctype="multipart/form-data" method="POST" action="/fileupload">
-            <h2>Upload Image</h2>
-            <input type="file" id="fileInput" accept="image/*" name="fileInput">
-            <button type="submit">Upload</button> <!-- Submit button included within the form -->
+        <form enctype="multipart/form-data" method="POST" action="/">
+            <h2 style="font-family: Arial, sans-serif; color: #333;">Upload Image</h2>
+            <input type="file" id="fileInput" accept="image/*" name="fileInput" style="margin-bottom: 10px; border: 1px solid #ccc; padding: 8px;">
+            <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.3s;">Upload</button> <!-- Submit button included within the form -->
         </form>
     </div>
 </div>
