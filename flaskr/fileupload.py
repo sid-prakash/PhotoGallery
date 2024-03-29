@@ -19,24 +19,37 @@ bp = Blueprint('fileupload', __name__)
 #     return render_template('fileupload/index.html')
 
 
+import random
+
+
+
+
+
 
 @bp.route('/fileupload', methods=['POST'])
 @login_required
 def upload_file():
-    # cur = conn.cursor()
-    print("woowowowowow")
     if request.method == 'POST':
-        print("woowowowowow")
         file = request.files['fileInput']
         
         filename = secure_filename(file.filename)
+        table = get_db().Table('project2photos')
+        insert_item_resp = table.put_item(
+            Item={
+                'photo_id': random.randint(0,500),
+                'photo_url': filename,
+                'owner': g.user,
+            }
+        )
 
         client = boto3.client('s3', aws_access_key_id=current_app.config['S3_KEY'], aws_secret_access_key=current_app.config['S3_SECRET'])
         client.put_object(Body=file,
                           Bucket=current_app.config['S3_BUCKET'],
                           Key=filename)
-        
 
+
+
+        flash("Succes!")
         return render_template('fileupload/index.html')
 
     return render_template('fileupload/index.html')
