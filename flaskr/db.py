@@ -25,8 +25,8 @@ def get_db():
 
     # Assuming get_S3Key_from_CSV() and get_S3Secret_from_CSV() are functions to get MongoDB credentials
     mongo_uri = ""
-
-    return MongoClient(mongo_uri)
+    client = MongoClient(mongo_uri)
+    return client["422project2"]
 
 def close_db(e=None):
     db = g.pop('db', None)

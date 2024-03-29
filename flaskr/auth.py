@@ -82,12 +82,12 @@ def get_user_info(username):
     # Assuming app.dynamodb is the initialized DynamoDB resource
 
     help = get_db()
-    table = help.Table(table_name)
-    response = table.query(
-        KeyConditionExpression=Key('username').eq(username)
-    )
+    table = help[table_name]
+    myquery = {"username": username}
+    myuser = table.find_one(myquery)
 
-    return (response['Items'])[0]
+
+    return myuser
 
 
 
