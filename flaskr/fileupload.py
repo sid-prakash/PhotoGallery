@@ -11,22 +11,16 @@ import boto3
 
 bp = Blueprint('fileupload', __name__)
 
-'''
-@bp.route('/')
-@login_required
-def index():
-    d = g
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute(
-        'SELECT photo_url FROM photogallery_data.photo_info WHERE owner=%s', (g.user[0],)
-    )
-    posts = cursor.fetchall()
-    return render_template('fileupload/index.html', posts=posts)
-'''
+
+# @bp.route('/')
+# @login_required
+# def index():
+#
+#     return render_template('fileupload/index.html')
 
 
-@bp.route('/', methods=['POST'])
+
+@bp.route('/fileupload', methods=['POST'])
 @login_required
 def upload_file():
     # cur = conn.cursor()
@@ -43,9 +37,9 @@ def upload_file():
                           Key=filename)
         
 
-        return render_template('fileupload/gallery.html')
+        return render_template('fileupload/index.html')
 
-    return render_template('fileupload/gallery.html')
+    return render_template('fileupload/index.html')
 
 
 

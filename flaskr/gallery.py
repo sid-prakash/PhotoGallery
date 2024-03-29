@@ -11,6 +11,11 @@ import boto3
 
 bp = Blueprint('gallery', __name__)
 
+@bp.route('/index')
+def index():
+
+    return render_template('fileupload/index.html')
+
 @bp.route('/', methods=['GET', 'POST'])
 @login_required
 def upload_file():

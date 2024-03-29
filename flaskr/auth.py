@@ -114,7 +114,7 @@ def login():
                 session.clear()
             h = session
             session['username'] = username
-            return  render_template('fileupload/gallery.html')
+            return redirect(url_for("fileupload.gallery"))
 
         flash(error)
 
@@ -136,7 +136,7 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('fileupload.index'))
+    return redirect(url_for('fileupload.gallery'))
 
 
 def login_required(view):

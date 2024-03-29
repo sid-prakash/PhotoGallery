@@ -1,41 +1,34 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block header %}
-<h1>{% block title %}Users Uploads{% endblock %}</h1>
-{% if g.user %}
-{% endif %}
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='gallery.css') }}">
+</head>
 
-{% block content %}
-  {% for post in posts %}
-    <article class="post">
-      <p class="body">{{ post[0] }}</p>
-    </article>
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
-  {% endfor %}
+<body>
+<nav class="navbar">
+    <div class="container">
+        <h1>Image Gallery</h1>
+        <button class="logout-button"><a href="{{ url_for('auth.logout') }}">Log Out</a></button>
 
-<form enctype="multipart/form-data" method="POST">
-    <h2>Upload Image:</h2>
-    <input name="img" type="file"/>
-    <button type="submit">submit</button>
-</form>
+        <button class="logout-button"><a href="{{ url_for('fileupload.gallery') }}">Gallery</a></button>
+    </div>
+</nav>
 
-{% if upload %}
-<br><a>{{ upload }}</a>
-{% endif %}
+<div class="container">
+    <div class="upload-section">
+        <form enctype="multipart/form-data" method="POST" action="/">
+            <h2>Upload Image</h2>
+            <input type="file" id="fileInput" accept="image/*" name="fileInput">
+            <button type="submit">Upload</button> <!-- Submit button included within the form -->
+        </form>
+    </div>
+</div>
 
-<form enctype="multipart/form-data" method="GET">
-    <h2>Search for Image</h2>
-    <input name="fileNameToSearch" type="text" placeholder="Search..">
-    <button type="submit">search</button>
-</form>
-<br>
 
-{% if image == "image not found" %}
-<a>{{image}}</a>
-{% elif image %}
-<div><a href="https://{{ image[1] }}.s3.{{ image[2] }}.amazonaws.com/{{ image[0] }}">{{ image[0] }}</a></div>
-{% endif %}
-{% endblock %} 
+</body>
+
+</html>
