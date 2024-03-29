@@ -27,10 +27,13 @@ def register():
 
         if error is None:
             try:
-                db.cursor().execute(
-                    "INSERT INTO user_info (username, password_hash) VALUES (\"" + username + "\",\"" + password + "\")"
+                table = db.Table('project2users')
+                insert_item_resp = table.put_item(
+                    Item={
+                        'username': username,
+                        'password_hash': password,
+                    }
                 )
-                db.commit()
             except db.IntegrityError:
                 error = f"User {username} is already registered."
             else:
@@ -39,6 +42,39 @@ def register():
         flash(error)
 
     return render_template('auth/register.html')
+#
+# @bp.route('/resetpassword', methods=('GET', 'POST'))
+# def register():
+#     if request.method == 'POST':
+#         password = request.form['password']
+#         db = get_db()
+#         error = None
+#
+#
+#         if not password:
+#             error = 'Password is required.'
+#
+#         if error is None:
+#             try:
+#                 table = db.Table('project2users')
+#
+#                 response = table.update_item(
+#                     Key={
+#                         'username': g.user,
+#                     },
+#                     UpdateExpression='SET password_hash = :password_hash',
+#                     ExpressionAttributeValues={
+#                         ':password_hash': password
+#                     }
+#                 )
+#             except db.IntegrityError:
+#                 flash(error)
+#             else:
+#                 return redirect(url_for("fileupload.gallery"))
+#
+#         flash(error)
+#
+#     return render_template('auth/resetpassword.html')
 
 def get_user_info(username):
     table_name = 'project2users'  # Replace 'user_info_table' with your actual table name
