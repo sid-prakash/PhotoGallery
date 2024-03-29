@@ -45,7 +45,7 @@ def create_app(test_config=None):
     app.register_blueprint(gallery.bp)
     app.add_url_rule('/', endpoint='fileupload.gallery')
 
-
+    print("\033[91m" + "Make sure your Keys.csv is just under SE422Project1 and not in flaskr subdirectory" + "\033[0m")
     app.config['S3_BUCKET'] = "project1s3imagesbucket"
     app.config['S3_KEY'] = get_S3Key_from_CSV()
     app.config['S3_SECRET'] = get_S3Secret_from_CSV()
