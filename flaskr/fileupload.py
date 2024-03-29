@@ -36,7 +36,7 @@ def upload_file():
         table = get_db().Table('project2photos')
         insert_item_resp = table.put_item(
             Item={
-                'photo_id': random.randint(0,500),
+                'photo_id': random.randint(0 , 500000),
                 'photo_url': filename,
                 'owner': g.user,
             }
