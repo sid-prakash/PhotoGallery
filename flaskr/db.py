@@ -4,6 +4,9 @@ import click
 from boto3.session import Session
 from flask import current_app, g
 import boto3
+from pymongo import MongoClient
+
+
 def get_db():
 
     # current_app.config['DYNAMO_TABLES'] = [
@@ -20,10 +23,10 @@ def get_db():
     #     }
     # ]
 
-    return boto3.resource('dynamodb',
-                          region_name='us-east-1',
-                          aws_access_key_id=get_S3Key_from_CSV(),
-                          aws_secret_access_key=get_S3Secret_from_CSV())
+    # Assuming get_S3Key_from_CSV() and get_S3Secret_from_CSV() are functions to get MongoDB credentials
+    mongo_uri = ""
+
+    return MongoClient(mongo_uri)
 
 def close_db(e=None):
     db = g.pop('db', None)
