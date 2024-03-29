@@ -2,40 +2,43 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Gallery</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='gallery.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='gallery.css') }}">
 </head>
 
 <body>
-  <nav class="navbar">
+<nav class="navbar">
     <div class="container">
         <h1>Image Gallery</h1>
         <button class="logout-button" onclick="window.location.href='{{ url_for('auth.logout') }}'">Log Out</button>
-        <button class="logout-button" onclick="window.location.href='{{ url_for('gallery.index') }}'">File Upload</button>
+        <button class="logout-button" onclick="window.location.href='{{ url_for('gallery.index') }}'">File Upload
+        </button>
     </div>
 </nav>
 
-  <div class="container">
+<div class="container">
     <div class="search-section">
-      <h2>Search Images</h2>
-      <input type="text" id="searchInput" placeholder="Search images...">
+        <h2>Search Images</h2>
+        <input type="text" id="searchInput" placeholder="Search images...">
     </div>
 
     <div class="gallery" id="imageGallery">
-      <!-- Images will be displayed here -->
-      {% for url in image %}
-      <div class="gallery-item">
-        <img src="{{ url[0] }}" alt="{{ url[1] }}">
-        <a>{{ url[1] }}</a>
-         <a href="{{ url_for('gallery.download', filename=url[0]) }}"><button>Download</button></a>
-      </div>
-      {% endfor %}
+        <!-- Images will be displayed here -->
+        {% for url in image %}
+        <div class="gallery-item">
+            <img src="{{ url[0] }}" alt="{{ url[1] }}">
+            <a>{{ url[1] }}</a>
+            <a href="{{ url_for('gallery.download', filename=url[0]) }}">
+                <button>Download</button>
+            </a>
+        </div>
+        {% endfor %}
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
     document.getElementById('searchInput').addEventListener('input', function (event) {
       const searchTerm = event.target.value.toLowerCase(); // Get the search term and convert it to lowercase
       const images = document.querySelectorAll('.gallery-item');
@@ -49,7 +52,7 @@
         }
       });
     });
-  </script>
+</script>
 </body>
 
 </html>

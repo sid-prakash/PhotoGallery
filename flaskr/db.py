@@ -8,22 +8,6 @@ from pymongo import MongoClient
 
 
 def get_db():
-
-    # current_app.config['DYNAMO_TABLES'] = [
-    #     {
-    #         'TableName': 'project2users',
-    #         'KeySchema': [{'AttributeName': 'username', 'KeyType': 'String'}],
-    #         'AttributeDefinitions': [{'AttributeName': 'username', 'AttributeType': 'String'}],
-    #         'ProvisionedThroughput': {'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
-    #     }, {
-    #         'TableName': 'project2photos',
-    #         'KeySchema': [{'AttributeName': 'photo_id', 'KeyType': 'number'}],
-    #         'AttributeDefinitions': [{'AttributeName': 'photo_id', 'AttributeType': 'number'}],
-    #         'ProvisionedThroughput': {'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
-    #     }
-    # ]
-
-    # Assuming get_S3Key_from_CSV() and get_S3Secret_from_CSV() are functions to get MongoDB credentials
     mongo_uri = ""
     client = MongoClient(mongo_uri)
     return client["422project2"]
