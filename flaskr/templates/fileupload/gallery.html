@@ -1,22 +1,85 @@
-{% extends 'base.html' %}
-{% block header %}
-  <h1>{% block title %}Users Gallery{% endblock %}</h1>
-  {% if g.user %}
-  {% endif %}
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Gallery</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='gallery.css') }}">
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <h1>Image Gallery</h1>
+  </nav>
+
   <div class="container">
-
+    <div class="upload-section">
+      <h2>Upload Image</h2>
+      <input type="file" id="fileInput" accept="image/*">
+    </div>
     <div class="search-section">
       <h2>Search Images</h2>
       <input type="text" id="searchInput" placeholder="Search images...">
     </div>
+
     <div class="gallery" id="imageGallery">
       <!-- Images will be displayed here -->
+      {% for url in image %}
+      <div class="gallery-item">
+        <img src="{{ url[0] }}" alt="{{ url[1] }}">
+        <a>{{ url[1] }}</a>
+        <a href="{{ url[0] }}" download="hh"><button>Download</button></a>
+      </div>
+      {% endfor %}
     </div>
   </div>
-{% endblock %}
 
+  <script>
+    document.getElementById('fileInput').addEventListener('change', function (event) {
+      const files = event.target.files;
+      const gallery = document.getElementById('imageGallery');
 
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function () {
+            const img = document.createElement('img');
+            img.src = reader.result;
+            img.alt = file.name; // Set the alt attribute to the file name
 
+            const nameParagraph = document.createElement('a'); // Create a paragraph element for the name
+            nameParagraph.href = "https://project1s3imagesbucket.s3.us-east-1.amazonaws.com/${file.name}"
+            nameParagraph.textContent = file.name; // Set the text content to the file name
+
+            const galleryItem = document.createElement('div'); // Create a container for each image and its name
+            galleryItem.classList.add('gallery-item');
+            galleryItem.appendChild(img);
+            galleryItem.appendChild(nameParagraph);
+
+            gallery.appendChild(galleryItem); // Append the container to the gallery
+          }
+          reader.readAsDataURL(file);
+        }
+      }
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function (event) {
+      const searchTerm = event.target.value.toLowerCase(); // Get the search term and convert it to lowercase
+      const images = document.querySelectorAll('.gallery-item');
+
+      images.forEach(function (item) {
+        const imageName = item.querySelector('img').alt.toLowerCase(); // Get the image name and convert it to lowercase
+        if (imageName.includes(searchTerm)) {
+          item.style.display = 'block'; // Show the image if the search term is found in the image name
+        } else {
+          item.style.display = 'none'; // Hide the image if the search term is not found in the image name
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

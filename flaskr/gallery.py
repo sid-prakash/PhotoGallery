@@ -14,11 +14,18 @@ bp = Blueprint('gallery', __name__)
 @bp.route('/')
 @login_required
 def upload_file():
-    # help = get_db()
-    # table = help.Table('project2photos')
-    # username = g.user
-    # response = table.scan(
-    #     FilterExpression=Attr('owner').eq(g.user)
-    # )
+    help = get_db()
+    table = help.Table('project2photos')
+    username = g.user
+    response = table.scan(
+        FilterExpression=Attr('owner').eq(g.user)
+    )
+    
+    items = response['Items']
+    photo_url = []
+    for item in items:
+        url = "https://project1s3imagesbucket.s3.us-east-1.amazonaws.com/" + item['photo_url']
+        photo_url.append([url, item['photo_url']])
+    
 
-    return render_template('fileupload/gallery.html')
+    return render_template('fileupload/gallery.html', image=photo_url, as_attachment=True)
