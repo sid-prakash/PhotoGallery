@@ -11,12 +11,11 @@
 <body>
   <nav class="navbar">
     <div class="container">
-      <h1>Image Gallery</h1>
-        <button class="logout-button"><a href="{{ url_for('auth.logout') }}">Log Out</a></button>
-
-        <button class="logout-button"><a href="{{ url_for('gallery.index') }}">File Upload</a></button>
+        <h1>Image Gallery</h1>
+        <button class="logout-button" onclick="window.location.href='{{ url_for('auth.logout') }}'">Log Out</button>
+        <button class="logout-button" onclick="window.location.href='{{ url_for('gallery.index') }}'">File Upload</button>
     </div>
-  </nav>
+</nav>
 
   <div class="container">
     <div class="search-section">
