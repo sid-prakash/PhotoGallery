@@ -5,6 +5,7 @@ from boto3.dynamodb.conditions import Key, Attr
 from flask import (
     Blueprint, current_app, flash, g, redirect, render_template, request, url_for, send_from_directory, send_file
 )
+from pymongo import collection
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 
@@ -23,13 +24,11 @@ def index():
 @login_required
 def upload_file():
     help = get_db()
-    table = help.Table('project2photos')
-    username = g.user
-    response = table.scan(
-        FilterExpression=Attr('owner').eq(g.user)
-    )
-    
-    items = response['Items']
+    table = help['project2photos']
+    items = table.find({"owner": g.user})
+
+    # Convert items to a list if needed
+    items = list(items)
     photo_url = []
     for item in items:
         url = "https://project1s3imagesbucket.s3.us-east-1.amazonaws.com/" + item['photo_url']

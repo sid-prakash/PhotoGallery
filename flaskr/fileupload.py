@@ -33,9 +33,8 @@ def upload_file():
         file = request.files['fileInput']
         
         filename = secure_filename(file.filename)
-        table = get_db().Table('project2photos')
-        insert_item_resp = table.put_item(
-            Item={
+        table = get_db()['project2photos']
+        insert_item_resp = table.insert_one({
                 'photo_id': random.randint(0 , 500000),
                 'photo_url': filename,
                 'owner': g.user,
