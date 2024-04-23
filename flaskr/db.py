@@ -1,10 +1,8 @@
 import csv
 
 import click
-from boto3.session import Session
 from flask import current_app, g
-import boto3
-from pymongo import MongoClient
+import mysql.connector
 
 
 def get_db():
@@ -13,7 +11,7 @@ def get_db():
             host='35.232.40.50',
             user='root',
             password='password',
-            database='Google_Cloud_SQL',
+            database='project3',
             port=3306
         )
 
