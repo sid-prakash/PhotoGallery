@@ -56,11 +56,15 @@ def upload_file():
 @bp.route('/uploads/<path:filename>', methods=['GET', 'POST'])
 def download(filename):
     # Download file from S3 bucket to a temporary file
-    s3 = boto3.client('s3', aws_access_key_id=current_app.config['S3_KEY'], aws_secret_access_key=current_app.config['S3_SECRET'])
+    #s3 = boto3.client('s3', aws_access_key_id=current_app.config['S3_KEY'], aws_secret_access_key=current_app.config['S3_SECRET'])
 
-    key = os.path.basename(filename)
-    temp_file = tempfile.NamedTemporaryFile(delete=False)
-    s3.download_fileobj( current_app.config['S3_BUCKET'], key, temp_file)
+    
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'tough-craft-420217-626a229abca4.json' #put json file here
+    g.storage_client = storage.Client()
 
-    # Serve the downloaded file
-    return send_file(temp_file.name, as_attachment=True, download_name=os.path.basename(filename))
+    bucket = g.storage_client.get_bucket('422project3')
+    blob = bucket.blob(filename)
+    with open(filename, 'wb') as f:
+        return g.storage_client.download_blob_to_file(blob, f)
+
+    
