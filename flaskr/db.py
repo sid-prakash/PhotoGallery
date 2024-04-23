@@ -8,11 +8,10 @@ import pymysql.cursors
 def get_db():
     if 'db' not in g:
         g.db = pymysql.connect(
-            host='35.232.40.50',
+            host='127.0.0.1',
             user='root',
             password='password',
-            database='project3',
-            port=3306
+            cursorclass=pymysql.cursors.DictCursor
         )
 
 

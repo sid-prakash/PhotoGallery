@@ -1,8 +1,10 @@
 import functools
 import boto3
+import sqlalchemy
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, Flask
 )
+import pymysql.cursors
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from flaskr.db import get_db
@@ -27,13 +29,8 @@ def register():
 
         if error is None:
             try:
-                table = db['project2users']
-                insert_item_resp = table.insert_one(
-                    {
-                        'username': username,
-                        'password_hash': password,
-                    }
-                )
+                with db.cursor() as cursor:
+                    cursor.execute("INSERT INTO project3.users (username, password) VALUES ('devin', 'very-secret');")
             except db.IntegrityError:
                 error = f"User {username} is already registered."
             else:
@@ -42,49 +39,16 @@ def register():
         flash(error)
 
     return render_template('auth/register.html')
-#
-# @bp.route('/resetpassword', methods=('GET', 'POST'))
-# def register():
-#     if request.method == 'POST':
-#         password = request.form['password']
-#         db = get_db()
-#         error = None
-#
-#
-#         if not password:
-#             error = 'Password is required.'
-#
-#         if error is None:
-#             try:
-#                 table = db.Table('project2users')
-#
-#                 response = table.update_item(
-#                     Key={
-#                         'username': g.user,
-#                     },
-#                     UpdateExpression='SET password_hash = :password_hash',
-#                     ExpressionAttributeValues={
-#                         ':password_hash': password
-#                     }
-#                 )
-#             except db.IntegrityError:
-#                 flash(error)
-#             else:
-#                 return redirect(url_for("fileupload.gallery"))
-#
-#         flash(error)
-#
-#     return render_template('auth/resetpassword.html')
 
 def get_user_info(username):
     table_name = 'project2users'  # Replace 'user_info_table' with your actual table name
 
     # Assuming app.dynamodb is the initialized DynamoDB resource
 
-    help = get_db()
-    table = help[table_name]
-    myquery = {"username": username}
-    myuser = table.find_one(myquery)
+    db = get_db()
+    with db.cursor() as cursor:
+        cursor.execute("SELECT * FROM project3.users WHERE username='"+username+"';")
+        myuser = cursor.fetchone()
 
 
     return myuser
@@ -106,7 +70,7 @@ def login():
 
         if user is None:
             error = 'Incorrect username.'
-        elif not user.get('password_hash') == password_hash:
+        elif not user['password'] == password_hash:
             error = 'Incorrect password.'
 
         if error is None:
