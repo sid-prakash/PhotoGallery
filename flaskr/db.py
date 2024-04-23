@@ -8,9 +8,17 @@ from pymongo import MongoClient
 
 
 def get_db():
-    mongo_uri = ""
-    client = MongoClient(mongo_uri)
-    return client["422project2"]
+    if 'db' not in g:
+        g.db = mysql.connector.connect(
+            host='35.232.40.50',
+            user='root',
+            password='password',
+            database='Google_Cloud_SQL',
+            port=3306
+        )
+
+
+    return g.db
 
 def close_db(e=None):
     db = g.pop('db', None)
