@@ -1,7 +1,10 @@
+import os
+
 from boto3.dynamodb.conditions import Key
 from flask import (
     Blueprint, current_app,flash, g, redirect, render_template, request, url_for
 )
+from google.cloud import storage
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 
@@ -31,22 +34,24 @@ import random
 def upload_file():
     if request.method == 'POST':
         file = request.files['fileInput']
-        
+
+        db = get_db()
+
+
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'tough-craft-420217-626a229abca4.json'  # put json file here
+        g.storage_client = storage.Client()
+
         filename = secure_filename(file.filename)
-        table = get_db()['project2photos']
-        insert_item_resp = table.insert_one({
-                'photo_id': random.randint(0 , 500000),
-                'photo_url': filename,
-                'owner': g.user,
-            }
-        )
-
-        client = boto3.client('s3', aws_access_key_id=current_app.config['S3_KEY'], aws_secret_access_key=current_app.config['S3_SECRET'])
-        client.put_object(Body=file,
-                          Bucket=current_app.config['S3_BUCKET'],
-                          Key=filename)
+        table = "INSERT INTO  project3.photos (username, url) VALUES ('"+g.user+"', '"+filename+"');"
 
 
+        bucket = g.storage_client.get_bucket('422project3')
+        blob = bucket.blob(filename)
+        blob.upload_from_file(file)
+
+        with db.cursor() as cursor:
+            cursor.execute(table)
+            db.commit()
 
         flash("Succes!")
         return render_template('fileupload/index.html')

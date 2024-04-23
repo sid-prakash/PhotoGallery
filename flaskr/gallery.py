@@ -28,7 +28,7 @@ def upload_file():
         cursor.execute("SELECT * FROM project3.photos WHERE username='"+g.user+"';")
         items = cursor.fetchall()
 
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '' #put json file here
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'tough-craft-420217-626a229abca4.json' #put json file here
     g.storage_client = storage.Client()
 
     # Convert items to a list if needed
