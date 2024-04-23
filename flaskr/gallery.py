@@ -64,7 +64,7 @@ def download(filename):
 
     bucket = g.storage_client.get_bucket('422project3')
     blob = bucket.blob(filename)
-    with open(filename, 'wb') as f:
+    with open(os.get, 'wb') as f:
         return g.storage_client.download_blob_to_file(blob, f)
 
     
