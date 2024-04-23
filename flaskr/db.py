@@ -2,12 +2,12 @@ import csv
 
 import click
 from flask import current_app, g
-import mysql.connector
+import pymysql.cursors
 
 
 def get_db():
     if 'db' not in g:
-        g.db = mysql.connector.connect(
+        g.db = pymysql.connect(
             host='35.232.40.50',
             user='root',
             password='password',
