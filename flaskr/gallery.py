@@ -1,6 +1,6 @@
 import os
 import tempfile
-
+from google.cloud import storage
 from boto3.dynamodb.conditions import Key, Attr
 from flask import (
     Blueprint, current_app, flash, g, redirect, render_template, request, url_for, send_from_directory, send_file
@@ -23,16 +23,20 @@ def index():
 @bp.route('/', methods=['GET', 'POST'])
 @login_required
 def upload_file():
-    help = get_db()
-    table = help['project2photos']
-    items = table.find({"owner": g.user})
+    db = get_db()
+    with db.cursor() as cursor:
+        cursor.execute("SELECT * FROM project3.photos WHERE username='"+g.user+"';")
+        items = cursor.fetchall()
+
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '' #put json file here
+    g.storage_client = storage.Client()
 
     # Convert items to a list if needed
     items = list(items)
     photo_url = []
     for item in items:
-        url = "https://project1s3imagesbucket.s3.us-east-1.amazonaws.com/" + item['photo_url']
-        photo_url.append([url, item['photo_url']])
+        url = "https://storage.cloud.google.com/422project3/" + item['url']
+        photo_url.append([url, item['url']])
         
     
     if request.method == 'POST':
