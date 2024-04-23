@@ -37,18 +37,7 @@ def upload_file():
     for item in items:
         url = "https://storage.cloud.google.com/422project3/" + item['url']
         photo_url.append([url, item['url']])
-        
-    
-    if request.method == 'POST':
-        file = request.files['fileInput']
-        
-        filename = secure_filename(file.filename)
 
-        client = boto3.client('s3', aws_access_key_id=current_app.config['S3_KEY'], aws_secret_access_key=current_app.config['S3_SECRET'])
-        client.put_object(Body=file,
-                          Bucket=current_app.config['S3_BUCKET'],
-                          Key=filename)
-        return render_template('fileupload/gallery.html', image=photo_url, as_attachment=True)
     
 
     return render_template('fileupload/gallery.html', image=photo_url, as_attachment=True)
