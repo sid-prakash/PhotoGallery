@@ -30,7 +30,8 @@ def register():
         if error is None:
             try:
                 with db.cursor() as cursor:
-                    cursor.execute("INSERT INTO project3.users (username, password) VALUES ('devin', 'very-secret');")
+                    cursor.execute("INSERT INTO project3.users (username, password) VALUES ('"+username+"', '"+password+"');")
+                    db.commit()
             except db.IntegrityError:
                 error = f"User {username} is already registered."
             else:
