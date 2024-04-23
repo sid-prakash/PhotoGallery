@@ -6,10 +6,10 @@ from flask import current_app, g
 def get_db():
     if 'db' not in g:
         g.db = mysql.connector.connect(
-            host='se422project1.cfcmskqwgqu4.us-east-1.rds.amazonaws.com',
-            user='admin',
+            host='35.232.40.50',
+            user='root',
             password='password',
-            database='photogallery_data',
+            database='Google_Cloud_SQL',
             port=3306
         )
 
