@@ -42,6 +42,21 @@ def upload_file():
 
     return render_template('fileupload/gallery.html', image=photo_url, as_attachment=True)
 
+
+def download_file_from_bucket(blob_name,file_path,bucket_name):
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'tough-craft-420217-626a229abca4.json'  # put json file here
+    g.storage_client = storage.Client()
+    try:
+        bucket = g.storage_client.get_bucket(bucket_name)
+        blob = bucket.blob(blob_name)
+        with open(file_path,'wb') as f:
+            g.storage_client.download_blob_to_file(blob,f)
+        return(True)
+    except Exception as e:
+        print (e)
+        return False
+
+
 @bp.route('/uploads/<path:filename>', methods=['GET', 'POST'])
 def download(filename):
     # Download file from S3 bucket to a temporary file
@@ -51,9 +66,12 @@ def download(filename):
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'tough-craft-420217-626a229abca4.json' #put json file here
     g.storage_client = storage.Client()
 
-    bucket = g.storage_client.get_bucket('422project3')
-    blob = bucket.blob(filename)
-    with open(os.get, 'wb') as f:
-        return g.storage_client.download_blob_to_file(blob, f)
+    bucket = '422project3'
+    blobname = filename
+    temp_file = tempfile.NamedTemporaryFile(delete=False)
+    download_file_from_bucket(blobname, temp_file, bucket)
+
+    # Serve the downloaded file
+    return send_file(temp_file.name, as_attachment=True, download_name=os.path.basename(filename))
 
     
